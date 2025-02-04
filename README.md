@@ -1,6 +1,6 @@
 # Initverse Mainnet Mining
 
-- Buy VPS di : t.me/skuycloud
+- Buy VPS di : [t.me/skuycloud](t.me/skuycloud)
 
 # Run Command
 ```
