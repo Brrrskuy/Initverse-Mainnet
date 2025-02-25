@@ -18,6 +18,7 @@ RESTART_INTERVAL=3600  # 1 hour in seconds
 declare -A MINING_POOLS=(
     ["YatesPool"]="pool-a.yatespool.com:31588"
     ["BackupPool"]="pool-b.yatespool.com:32488"
+    ["NewPool"]="pool-c.yatespool.com:31189"  # Added new pool
 )
 
 # Function to display banner
@@ -85,10 +86,18 @@ setup_mining() {
     read -p "Select pool (1-${#MINING_POOLS[@]}): " pool_choice
     local pool_address=$(echo "${MINING_POOLS[@]}" | cut -d' ' -f$pool_choice)
 
-    # Setup CPU cores
+    # Setup CPU cores (limited to 8 cores)
+    local max_cores=8
     echo -e "${LIGHTCYAN}Available CPU cores: $CPU_CORES${NC}"
-    read -p "How many cores to use? (1-$CPU_CORES): " cores_to_use
+    read -p "How many cores to use? (1-$max_cores): " cores_to_use
     cores_to_use=${cores_to_use:-1}
+
+    # Ensure cores_to_use is between 1 and max_cores (8)
+    if [[ "$cores_to_use" -lt 1 ]]; then
+        cores_to_use=1
+    elif [[ "$cores_to_use" -gt $max_cores ]]; then
+        cores_to_use=$max_cores
+    fi
 
     # Setup restart interval
     echo -e "${LIGHTCYAN}Current auto-restart interval: ${RESTART_INTERVAL} seconds (1 hour)${NC}"
